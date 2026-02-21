@@ -1,0 +1,179 @@
+/**
+ * Chat List Component
+ * Displays list of all chats with glassmorphism design
+ */
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { useChat } from '../../context/ChatContext';
+import { useAuth } from '../../context/AuthContext';
+import { format } from 'date-fns';
+import { FiCheck, FiCheckCircle } from 'react-icons/fi';
+import { ChatListSkeleton } from '../LoadingSkeletons';
+
+const ChatList = () => {
+  const { chats, selectedChat, setSelectedChat, loading, onlineUsers } = useChat();
+  const { user } = useAuth();
+
+  const getChatName = (chat) => {
+    if (chat.isGroupChat) {
+      return chat.chatName;
+    }
+    const otherUser = chat.users.find(u => u._id !== user._id);
+    return otherUser?.name || 'Unknown';
+  };
+
+  const getChatAvatar = (chat) => {
+    if (chat.isGroupChat) {
+      return chat.groupAvatar || 'https://ui-avatars.com/api/?background=random&name=' + encodeURIComponent(chat.chatName);
+    }
+    const otherUser = chat.users.find(u => u._id !== user._id);
+    return otherUser?.avatar || 'https://ui-avatars.com/api/?background=random';
+  };
+
+  const isOnline = (chat) => {
+    if (chat.isGroupChat) return false;
+    const otherUser = chat.users.find(u => u._id !== user._id);
+    return onlineUsers.includes(otherUser?._id);
+  };
+
+  const getUnreadCount = (chat) => {
+    // This would come from your backend/context - placeholder for now
+    return chat.unreadCount || 0;
+  };
+
+  const formatTime = (date) => {
+    if (!date) return '';
+    const msgDate = new Date(date);
+    const today = new Date();
+    
+    if (msgDate.toDateString() === today.toDateString()) {
+      return format(msgDate, 'HH:mm');
+    }
+    return format(msgDate, 'dd/MM/yyyy');
+  };
+
+  const getLatestMessage = (chat) => {
+    if (!chat.latestMessage) return 'No messages yet';
+    
+    const msg = chat.latestMessage;
+    const isSender = msg.sender?._id === user._id;
+    const prefix = isSender ? 'You: ' : '';
+    
+    if (msg.fileType !== 'none') {
+      return `${prefix}📎 ${msg.fileType === 'image' ? 'Photo' : 'Document'}`;
+    }
+    
+    return `${prefix}${msg.content?.substring(0, 30)}${msg.content?.length > 30 ? '...' : ''}`;
+  };
+
+  if (loading) {
+    return <ChatListSkeleton />;
+  }
+
+  return (
+    <div className="flex-1 overflow-y-auto custom-scrollbar">
+      {chats.length === 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="flex flex-col items-center justify-center h-full p-6"
+        >
+          <div className="text-6xl mb-4">💬</div>
+          <p className="text-gray-500 dark:text-gray-400 text-center text-lg">
+            No chats yet
+          </p>
+          <p className="text-gray-400 dark:text-gray-500 text-center text-sm mt-2">
+            Search for users to start chatting!
+          </p>
+        </motion.div>
+      ) : (
+        <div className="p-2">
+          {chats.map((chat, index) => {
+            const unreadCount = getUnreadCount(chat);
+            const isSelected = selectedChat?._id === chat._id;
+
+            return (
+              <motion.div
+                key={chat._id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.2, delay: index * 0.05 }}
+                onClick={() => setSelectedChat(chat)}
+                className={`sidebar-item ${isSelected ? 'active' : ''} mb-2`}
+              >
+                {/* Avatar with online indicator */}
+                <div className="relative flex-shrink-0">
+                  <img
+                    src={getChatAvatar(chat)}
+                    alt={getChatName(chat)}
+                    loading="lazy"
+                    width="48"
+                    height="48"
+                    className="w-12 h-12 rounded-full object-cover ring-2 ring-white/10"
+                  />
+                  {isOnline(chat) && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"
+                    />
+                  )}
+                </div>
+
+                {/* Chat Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <h4 className="font-semibold text-gray-900 dark:text-white truncate">
+                      {getChatName(chat)}
+                    </h4>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0 ml-2">
+                      {formatTime(chat.latestMessage?.createdAt)}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between gap-2">
+                    <p className={`text-sm truncate flex-1 ${
+                      unreadCount > 0 
+                        ? 'text-gray-900 dark:text-white font-medium' 
+                        : 'text-gray-600 dark:text-gray-400'
+                    }`}>
+                      {getLatestMessage(chat)}
+                    </p>
+                    
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {/* Read receipts for sent messages */}
+                      {chat.latestMessage?.sender?._id === user._id && (
+                        <div>
+                          {chat.latestMessage?.readBy?.length > 1 ? (
+                            <FiCheckCircle size={14} className="text-blue-500" />
+                          ) : (
+                            <FiCheck size={14} className="text-gray-400 dark:text-gray-500" />
+                          )}
+                        </div>
+                      )}
+                      
+                      {/* Unread count badge */}
+                      {unreadCount > 0 && (
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="badge-notification"
+                        >
+                          {unreadCount > 99 ? '99+' : unreadCount}
+                        </motion.span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ChatList;

@@ -1,0 +1,108 @@
+/**
+ * Chat Page
+ * Main chat interface with sidebar and chat window
+ */
+
+import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useAuth } from '../context/AuthContext';
+import { useChat } from '../context/ChatContext';
+import { getSocket, connectSocket } from '../services/socket';
+import Sidebar from '../components/chat/Sidebar';
+import ChatWindow from '../components/chat/ChatWindow';
+
+const Chat = () => {
+  const { user } = useAuth();
+  const { selectedChat, fetchChats } = useChat();
+  const socket = getSocket();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      // Connect socket
+      connectSocket();
+      
+      // Setup socket with user ID
+      socket.emit('setup', user._id);
+      
+      socket.on('connected', () => {
+        console.log('Socket connected');
+      });
+
+      // Fetch chats
+      fetchChats();
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('connected');
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  // Close sidebar when chat is selected on mobile
+  useEffect(() => {
+    if (selectedChat && window.innerWidth < 1024) {
+      setSidebarOpen(false);
+    }
+  }, [selectedChat]);
+
+  return (
+    <>
+      <Helmet>
+        <title>Chat - Chat App</title>
+        <meta name="description" content="Start messaging with your contacts" />
+      </Helmet>
+
+      <div className="h-screen bg-light-bg dark:bg-dark-bg overflow-hidden">
+        <div className="flex h-full relative">
+          {/* Mobile Overlay */}
+          {sidebarOpen && (
+            <div 
+              className="fixed inset-0 bg-black/50 z-20 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+
+          {/* Sidebar - Responsive */}
+          <div className={`
+            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+            fixed lg:relative lg:translate-x-0
+            w-full sm:w-80 md:w-96
+            h-full z-30
+            transition-transform duration-300 ease-in-out
+          `}>
+            <Sidebar onClose={() => setSidebarOpen(false)} />
+          </div>
+
+          {/* Chat Window */}
+          {selectedChat ? (
+            <ChatWindow onMenuClick={() => setSidebarOpen(true)} />
+          ) : (
+            <div className="flex-1 flex items-center justify-center bg-light-secondary dark:bg-dark-secondary px-4">
+              <div className="text-center max-w-md">
+                <div className="text-4xl sm:text-6xl mb-4">💬</div>
+                <h2 className="text-xl sm:text-2xl font-semibold text-light-text dark:text-dark-text mb-2">
+                  Welcome to Chat App
+                </h2>
+                <p className="text-sm sm:text-base text-light-textSecondary dark:text-dark-textSecondary">
+                  Select a chat to start messaging
+                </p>
+                {/* Mobile Menu Button - Show on mobile when no chat selected */}
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="lg:hidden mt-6 btn-primary px-6 py-3"
+                >
+                  Open Chats
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Chat;

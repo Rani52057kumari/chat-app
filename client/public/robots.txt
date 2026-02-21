@@ -1,0 +1,30 @@
+# Allow all crawlers to access public pages
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /register
+Disallow: /chat
+Disallow: /api/
+Disallow: /admin/
+
+# Crawl delay for better server performance
+Crawl-delay: 1
+
+# Google-specific
+User-agent: Googlebot
+Allow: /
+Allow: /login
+Allow: /register
+Disallow: /chat
+Disallow: /api/
+
+# Bing-specific
+User-agent: Bingbot
+Allow: /
+Allow: /login
+Allow: /register
+Disallow: /chat
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://your-domain.com/sitemap.xml
