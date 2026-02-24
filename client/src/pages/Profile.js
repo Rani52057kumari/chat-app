@@ -3,7 +3,7 @@
  * Allows users to view and edit their profile
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiCamera, FiSave, FiX, FiEdit2, FiUser, FiMail, FiPhone, FiMessageSquare } from 'react-icons/fi';
 import { toast } from 'react-toastify';
@@ -24,6 +24,11 @@ const Profile = () => {
     bio: user?.bio || '',
     phone: user?.phone || ''
   });
+
+  // Dismiss any existing toasts when component mounts
+  useEffect(() => {
+    toast.dismiss();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -110,24 +115,47 @@ const Profile = () => {
 
     try {
       setLoading(true);
-      const response = await authAPI.updateProfile(formData);
+      
+      // Prepare clean data
+      const cleanData = {
+        name: formData.name.trim(),
+        bio: formData.bio.trim(),
+        phone: formData.phone.trim()
+      };
+
+      console.log('Updating profile with data:', cleanData);
+      const response = await authAPI.updateProfile(cleanData);
+      console.log('Profile update response:', response.data);
 
       if (response.data.success) {
         const updatedUser = { ...user, ...response.data.data };
         setUser(updatedUser);
         localStorage.setItem('user', JSON.stringify(updatedUser));
-        toast.success('Profile updated successfully');
+        toast.success('Profile updated successfully! 🎉');
         setIsEditing(false);
       }
     } catch (error) {
       console.error('Profile update error:', error);
-      toast.error(error.response?.data?.message || 'Failed to update profile');
+      console.error('Error response:', error.response?.data);
+      
+      // Show specific error message
+      let errorMessage = 'Failed to update profile';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        errorMessage = error.response.data.errors.map(e => e.message).join(', ');
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   const handleCancel = () => {
+    toast.dismiss(); // Clear any error messages
     setFormData({
       name: user?.name || '',
       bio: user?.bio || '',
@@ -135,6 +163,11 @@ const Profile = () => {
     });
     setIsEditing(false);
     setAvatarPreview(null);
+  };
+
+  const handleEditClick = () => {
+    toast.dismiss(); // Clear any old messages
+    setIsEditing(true);
   };
 
   return (
@@ -165,7 +198,7 @@ const Profile = () => {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => setIsEditing(true)}
+                    onClick={handleEditClick}
                     className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
                   >
                     <FiEdit2 className="w-4 h-4" />
