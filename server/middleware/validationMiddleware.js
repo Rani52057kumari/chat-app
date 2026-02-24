@@ -101,7 +101,7 @@ const updateProfileSchema = Joi.object({
   avatar: Joi.string().uri().optional(),
   bio: Joi.string().max(200).trim().optional(),
   phone: Joi.string()
-    .pattern(/^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/)
+    .pattern(/^[+]?[0-9\s\-().]{7,20}$/)
     .trim()
     .allow('')
     .optional()
