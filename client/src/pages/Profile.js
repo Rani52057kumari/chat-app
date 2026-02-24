@@ -144,33 +144,39 @@ const Profile = () => {
         description="View and edit your profile"
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 sm:py-8 px-4 sm:px-6">
+        <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-light dark:glass-dark rounded-2xl shadow-2xl overflow-hidden"
+            transition={{ duration: 0.3 }}
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-8 text-white">
+            <div className="border-b border-gray-200 dark:border-gray-700 px-6 py-5">
               <div className="flex justify-between items-center">
-                <h1 className="text-2xl sm:text-3xl font-bold">My Profile</h1>
+                <div>
+                  <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Profile</h1>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Manage your profile information
+                  </p>
+                </div>
                 {!isEditing ? (
                   <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => setIsEditing(true)}
-                    className="btn-secondary flex items-center gap-2"
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
                   >
                     <FiEdit2 className="w-4 h-4" />
-                    Edit Profile
+                    Edit
                   </motion.button>
                 ) : (
                   <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={handleCancel}
-                    className="btn-secondary flex items-center gap-2"
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
                   >
                     <FiX className="w-4 h-4" />
                     Cancel
@@ -180,36 +186,35 @@ const Profile = () => {
             </div>
 
             {/* Profile Content */}
-            <div className="p-6 sm:p-8">
-              <div className="flex flex-col items-center mb-8">
-                {/* Avatar */}
-                <div className="relative group">
-                  <motion.div
-                    whileHover={isEditing ? { scale: 1.05 } : {}}
-                    className="relative"
-                  >
+            <div className="p-6">
+              {/* Avatar Section */}
+              <div className="flex flex-col items-center pb-8 border-b border-gray-200 dark:border-gray-700">
+                <div className="relative group mb-3">
+                  <div className="relative">
                     <img
                       src={avatarPreview || user?.avatar || `https://ui-avatars.com/api/?name=${user?.name}&size=200`}
                       alt={user?.name}
-                      className={`w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-purple-500 shadow-2xl object-cover ${
-                        isEditing ? 'cursor-pointer' : ''
-                      } ${uploadingAvatar ? 'opacity-50' : ''}`}
-                      onClick={handleAvatarClick}
+                      className={`w-32 h-32 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-lg ${
+                        uploadingAvatar ? 'opacity-50' : ''
+                      }`}
                     />
-                    {isEditing && (
-                      <div
-                        className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+                    {isEditing && !uploadingAvatar && (
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={handleAvatarClick}
+                        className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 shadow-lg transition-all duration-200"
+                        type="button"
                       >
-                        <FiCamera className="w-8 h-8 text-white" />
-                      </div>
+                        <FiCamera className="w-5 h-5" />
+                      </motion.button>
                     )}
                     {uploadingAvatar && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded-full">
+                        <div className="animate-spin rounded-full h-10 w-10 border-4 border-white border-t-transparent"></div>
                       </div>
                     )}
-                  </motion.div>
+                  </div>
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -218,20 +223,25 @@ const Profile = () => {
                     className="hidden"
                   />
                 </div>
-
+                <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                  {user?.name}
+                </h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  {user?.email}
+                </p>
                 {isEditing && (
-                  <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
-                    Click avatar to upload new image (max 5MB)
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    Click camera icon to change avatar (max 5MB)
                   </p>
                 )}
               </div>
 
               {/* Profile Form */}
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="mt-8 space-y-6">
                 {/* Name */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    <FiUser className="w-4 h-4" />
+                    <FiUser className="w-4 h-4 text-gray-400" />
                     Name
                   </label>
                   {isEditing ? (
@@ -240,13 +250,13 @@ const Profile = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="input-field"
+                      className="w-full px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
                       placeholder="Enter your name"
                       maxLength={50}
                       required
                     />
                   ) : (
-                    <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-3 text-gray-900 dark:text-white">
+                    <div className="px-4 py-2.5 text-gray-900 dark:text-gray-200 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 rounded-lg">
                       {user?.name}
                     </div>
                   )}
@@ -255,22 +265,23 @@ const Profile = () => {
                 {/* Email (Read-only) */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    <FiMail className="w-4 h-4" />
+                    <FiMail className="w-4 h-4 text-gray-400" />
                     Email
                   </label>
-                  <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-3 text-gray-900 dark:text-white">
+                  <div className="px-4 py-2.5 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 rounded-lg">
                     {user?.email}
                   </div>
-                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    Email cannot be changed
+                  <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
+                    Email address cannot be changed
                   </p>
                 </div>
 
                 {/* Phone */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    <FiPhone className="w-4 h-4" />
-                    Phone (Optional)
+                    <FiPhone className="w-4 h-4 text-gray-400" />
+                    Phone Number
+                    <span className="text-xs text-gray-400 font-normal">(Optional)</span>
                   </label>
                   {isEditing ? (
                     <input
@@ -278,11 +289,11 @@ const Profile = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="input-field"
+                      className="w-full px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
                       placeholder="Enter your phone number"
                     />
                   ) : (
-                    <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-3 text-gray-900 dark:text-white">
+                    <div className="px-4 py-2.5 text-gray-900 dark:text-gray-200 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 rounded-lg">
                       {user?.phone || 'Not provided'}
                     </div>
                   )}
@@ -291,59 +302,67 @@ const Profile = () => {
                 {/* Bio */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    <FiMessageSquare className="w-4 h-4" />
-                    Bio
+                    <FiMessageSquare className="w-4 h-4 text-gray-400" />
+                    About
                   </label>
                   {isEditing ? (
-                    <textarea
-                      name="bio"
-                      value={formData.bio}
-                      onChange={handleChange}
-                      rows={3}
-                      className="input-field resize-none"
-                      placeholder="Tell us about yourself"
-                      maxLength={200}
-                    />
+                    <>
+                      <textarea
+                        name="bio"
+                        value={formData.bio}
+                        onChange={handleChange}
+                        rows={3}
+                        className="w-full px-4 py-2.5 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 resize-none"
+                        placeholder="Write something about yourself"
+                        maxLength={200}
+                      />
+                      <div className="flex justify-between items-center mt-1.5">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          Share a bit about yourself
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {formData.bio.length}/200
+                        </p>
+                      </div>
+                    </>
                   ) : (
-                    <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-3 text-gray-900 dark:text-white min-h-[80px]">
+                    <div className="px-4 py-2.5 text-gray-900 dark:text-gray-200 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 rounded-lg min-h-[80px]">
                       {user?.bio || 'No bio added yet'}
                     </div>
                   )}
-                  {isEditing && (
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                      {formData.bio.length}/200 characters
-                    </p>
-                  )}
                 </div>
 
-                {/* Submit Button */}
+                {/* Action Buttons */}
                 {isEditing && (
-                  <div className="flex gap-3 pt-4">
+                  <div className="flex gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
                     <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
                       type="submit"
                       disabled={loading}
-                      className="btn-primary flex-1 flex items-center justify-center gap-2"
+                      className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg transition-all duration-200 ${
+                        loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-blue-700 active:bg-blue-800'
+                      }`}
                     >
                       {loading ? (
                         <>
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
                           Saving...
                         </>
                       ) : (
                         <>
-                          <FiSave className="w-5 h-5" />
+                          <FiSave className="w-4 h-4" />
                           Save Changes
                         </>
                       )}
                     </motion.button>
                     <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
                       type="button"
                       onClick={handleCancel}
-                      className="btn-secondary flex-1"
+                      disabled={loading}
+                      className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
                     >
                       Cancel
                     </motion.button>
