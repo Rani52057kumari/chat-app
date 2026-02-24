@@ -326,7 +326,7 @@ npm run dev    # Development mode with nodemon
 npm start      # Production mode
 ```
 
-**Terminal 2 - Start Client**
+**Terminal 2 - Start Client**cd server
 ```bash
 cd client
 npm start
