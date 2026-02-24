@@ -14,10 +14,12 @@ const {
   changePassword,
   forgotPassword,
   resetPassword,
-  googleAuthCallback
+  googleAuthCallback,
+  uploadAvatar
 } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const { authLimiter } = require('../middleware/securityMiddleware');
+const upload = require('../middleware/uploadMiddleware');
 const {
   validateRequest,
   registerSchema,
@@ -53,6 +55,13 @@ router.put(
   protect,
   validateRequest(updateProfileSchema),
   updateProfile
+);
+
+router.post(
+  '/upload-avatar',
+  protect,
+  upload.single('avatar'),
+  uploadAvatar
 );
 
 router.put(

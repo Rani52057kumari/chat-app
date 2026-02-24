@@ -26,6 +26,7 @@ const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const AuthSuccess = lazy(() => import('./pages/AuthSuccess'));
 const Chat = lazy(() => import('./pages/Chat'));
+const Profile = lazy(() => import('./pages/Profile'));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -61,6 +62,15 @@ function App() {
                       element={
                         <PrivateRoute>
                           <Chat />
+                        </PrivateRoute>
+                      }
+                    />
+
+                    <Route
+                      path="/profile"
+                      element={
+                        <PrivateRoute>
+                          <Profile />
                         </PrivateRoute>
                       }
                     />

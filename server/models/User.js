@@ -50,6 +50,14 @@ const userSchema = new mongoose.Schema(
       maxlength: [200, 'Bio cannot be more than 200 characters'],
       default: ''
     },
+    phone: {
+      type: String,
+      trim: true,
+      match: [
+        /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/,
+        'Please provide a valid phone number'
+      ]
+    },
     isOnline: {
       type: Boolean,
       default: false

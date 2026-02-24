@@ -112,6 +112,7 @@ const getMe = asyncHandler(async (req, res) => {
       email: user.email,
       avatar: user.avatar,
       bio: user.bio,
+      phone: user.phone,
       isOnline: user.isOnline,
       lastSeen: user.lastSeen
     }
@@ -133,6 +134,10 @@ const updateProfile = asyncHandler(async (req, res) => {
   user.name = req.body.name || user.name;
   user.bio = req.body.bio || user.bio;
   
+  if (req.body.phone !== undefined) {
+    user.phone = req.body.phone;
+  }
+  
   if (req.body.avatar) {
     user.avatar = req.body.avatar;
   }
@@ -147,7 +152,8 @@ const updateProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       avatar: updatedUser.avatar,
-      bio: updatedUser.bio
+      bio: updatedUser.bio,
+      phone: updatedUser.phone
     }
   });
 });
@@ -317,6 +323,44 @@ const googleAuthCallback = asyncHandler(async (req, res) => {
   res.redirect(`${process.env.CLIENT_URL}/auth/success?token=${token}`);
 });
 
+/**
+ * @desc    Upload user avatar
+ * @route   POST /api/auth/upload-avatar
+ * @access  Private
+ */
+const uploadAvatar = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    throw new BadRequestError('Please upload an image file');
+  }
+
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    throw new NotFoundError('User not found');
+  }
+
+  // Get file URL - depends on storage type (local or cloudinary)
+  let avatarUrl;
+  if (req.file.path.startsWith('http')) {
+    // Cloudinary URL
+    avatarUrl = req.file.path;
+  } else {
+    // Local file path
+    avatarUrl = `${process.env.API_URL || 'http://localhost:5000'}/uploads/${req.file.filename}`;
+  }
+
+  user.avatar = avatarUrl;
+  const updatedUser = await user.save();
+
+  res.json({
+    success: true,
+    message: 'Avatar uploaded successfully',
+    data: {
+      avatar: updatedUser.avatar
+    }
+  });
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -326,5 +370,6 @@ module.exports = {
   searchUsers,
   forgotPassword,
   resetPassword,
-  googleAuthCallback
+  googleAuthCallback,
+  uploadAvatar
 };

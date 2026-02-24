@@ -5,6 +5,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { 
   FiSearch, FiPlus, FiMoreVertical, FiSettings, 
   FiLogOut, FiMoon, FiSun, FiUsers, FiUser 
@@ -19,6 +20,7 @@ import { ChatListSkeleton } from '../LoadingSkeletons';
 const Sidebar = ({ loading, onClose }) => {
   const { user, logout } = useAuth();
   const { darkMode, toggleDarkMode } = useTheme();
+  const navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showGroupModal, setShowGroupModal] = useState(false);
@@ -28,6 +30,12 @@ const Sidebar = ({ loading, onClose }) => {
     logout();
   };
 
+  const handleProfileClick = () => {
+    navigate('/profile');
+    setShowMenu(false);
+    if (onClose) onClose(); // Close sidebar on mobile
+  };
+
   return (
     <div className="flex flex-col h-full glass-light dark:glass-dark lg:rounded-2xl overflow-hidden shadow-2xl">
       {/* Header */}
@@ -35,7 +43,7 @@ const Sidebar = ({ loading, onClose }) => {
         <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
           <div 
             className="relative cursor-pointer hover-lift flex-shrink-0"
-            onClick={() => setShowProfile(!showProfile)}
+            onClick={handleProfileClick}
           >
             <img
               src={user?.avatar || 'https://ui-avatars.com/api/?name=' + user?.name}
@@ -114,10 +122,7 @@ const Sidebar = ({ loading, onClose }) => {
                   className="context-menu right-0 top-12"
                 >
                   <button
-                    onClick={() => {
-                      setShowProfile(true);
-                      setShowMenu(false);
-                    }}
+                    onClick={handleProfileClick}
                     className="context-menu-item"
                   >
                     <FiUser className="w-4 h-4" />

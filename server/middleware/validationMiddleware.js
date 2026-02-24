@@ -99,7 +99,15 @@ const updateProfileSchema = Joi.object({
     .trim()
     .optional(),
   avatar: Joi.string().uri().optional(),
-  bio: Joi.string().max(200).trim().optional()
+  bio: Joi.string().max(200).trim().optional(),
+  phone: Joi.string()
+    .pattern(/^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/)
+    .trim()
+    .allow('')
+    .optional()
+    .messages({
+      'string.pattern.base': 'Please provide a valid phone number'
+    })
 });
 
 /**
