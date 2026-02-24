@@ -132,6 +132,12 @@ const errorHandler = (err, req, res, next) => {
  * Handle 404 errors
  */
 const notFound = (req, res, next) => {
+  // Silently ignore common browser requests for PWA files
+  const ignoredPaths = ['/service-worker.js', '/logo192.png', '/logo512.png', '/favicon.ico', '/manifest.json'];
+  if (ignoredPaths.includes(req.originalUrl)) {
+    return res.status(404).end();
+  }
+  
   const error = new NotFoundError(`Route not found - ${req.originalUrl}`);
   next(error);
 };
