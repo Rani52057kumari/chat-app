@@ -70,6 +70,16 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null
     },
+    onboardingCompleted: {
+      type: Boolean,
+      default: false
+    },
+    onboardingStep: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 4
+    },
     resetPasswordToken: {
       type: String,
       select: false

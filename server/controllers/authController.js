@@ -56,6 +56,8 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       avatar: user.avatar,
       bio: user.bio,
+      onboardingCompleted: user.onboardingCompleted,
+      onboardingStep: user.onboardingStep,
       token: generateToken(user._id)
     }
   });
@@ -91,6 +93,8 @@ const loginUser = asyncHandler(async (req, res) => {
       avatar: user.avatar,
       bio: user.bio,
       isOnline: user.isOnline,
+      onboardingCompleted: user.onboardingCompleted,
+      onboardingStep: user.onboardingStep,
       token: generateToken(user._id)
     }
   });
@@ -114,7 +118,9 @@ const getMe = asyncHandler(async (req, res) => {
       bio: user.bio,
       phone: user.phone,
       isOnline: user.isOnline,
-      lastSeen: user.lastSeen
+      lastSeen: user.lastSeen,
+      onboardingCompleted: user.onboardingCompleted,
+      onboardingStep: user.onboardingStep
     }
   });
 });
@@ -361,6 +367,40 @@ const uploadAvatar = asyncHandler(async (req, res) => {
   });
 });
 
+/**
+ * @desc    Update onboarding status
+ * @route   PUT /api/auth/onboarding
+ * @access  Private
+ */
+const updateOnboarding = asyncHandler(async (req, res) => {
+  const { step, completed } = req.body;
+
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    throw new NotFoundError('User not found');
+  }
+
+  if (step !== undefined) {
+    user.onboardingStep = step;
+  }
+
+  if (completed !== undefined) {
+    user.onboardingCompleted = completed;
+  }
+
+  const updatedUser = await user.save();
+
+  res.json({
+    success: true,
+    message: 'Onboarding status updated',
+    data: {
+      onboardingCompleted: updatedUser.onboardingCompleted,
+      onboardingStep: updatedUser.onboardingStep
+    }
+  });
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -371,5 +411,6 @@ module.exports = {
   forgotPassword,
   resetPassword,
   googleAuthCallback,
-  uploadAvatar
+  uploadAvatar,
+  updateOnboarding
 };

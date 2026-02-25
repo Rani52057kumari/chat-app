@@ -10,12 +10,21 @@ import { useChat } from '../context/ChatContext';
 import { getSocket, connectSocket } from '../services/socket';
 import Sidebar from '../components/chat/Sidebar';
 import ChatWindow from '../components/chat/ChatWindow';
+import Onboarding from '../components/Onboarding';
 
 const Chat = () => {
   const { user } = useAuth();
   const { selectedChat, fetchChats } = useChat();
   const socket = getSocket();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  // Check if user needs onboarding
+  useEffect(() => {
+    if (user && !user.onboardingCompleted) {
+      setShowOnboarding(true);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (user) {
@@ -101,6 +110,14 @@ const Chat = () => {
           )}
         </div>
       </div>
+
+      {/* Onboarding Modal */}
+      {showOnboarding && (
+        <Onboarding
+          onComplete={() => setShowOnboarding(false)}
+          onSkip={() => setShowOnboarding(false)}
+        />
+      )}
     </>
   );
 };

@@ -55,6 +55,7 @@ export const authAPI = {
       'Content-Type': 'multipart/form-data',
     },
   }),
+  updateOnboarding: (data) => api.put('/auth/onboarding', data),
   searchUsers: (search) => api.get(`/auth/users?search=${search}`),
   forgotPassword: (data) => api.post('/auth/forgot-password', data),
   resetPassword: (token, data) => api.post(`/auth/reset-password/${token}`, data),

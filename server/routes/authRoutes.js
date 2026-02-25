@@ -15,7 +15,8 @@ const {
   forgotPassword,
   resetPassword,
   googleAuthCallback,
-  uploadAvatar
+  uploadAvatar,
+  updateOnboarding
 } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const { authLimiter } = require('../middleware/securityMiddleware');
@@ -71,6 +72,8 @@ router.put(
   validateRequest(changePasswordSchema),
   changePassword
 );
+
+router.put('/onboarding', protect, updateOnboarding);
 
 router.get('/users', protect, searchUsers);
 
