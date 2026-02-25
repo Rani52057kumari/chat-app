@@ -78,18 +78,18 @@ const ChatList = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex flex-col items-center justify-center h-full p-6"
+          className="flex flex-col items-center justify-center h-full p-4 md:p-6"
         >
-          <div className="text-6xl mb-4">💬</div>
-          <p className="text-gray-500 dark:text-gray-400 text-center text-lg">
+          <div className="text-5xl sm:text-6xl mb-4">💬</div>
+          <p className="text-gray-500 dark:text-gray-400 text-center text-base md:text-lg">
             No chats yet
           </p>
-          <p className="text-gray-400 dark:text-gray-500 text-center text-sm mt-2">
+          <p className="text-gray-400 dark:text-gray-500 text-center text-xs md:text-sm mt-2">
             Search for users to start chatting!
           </p>
         </motion.div>
       ) : (
-        <div className="p-2">
+        <div className="p-1.5 md:p-2">
           {chats.map((chat, index) => {
             const unreadCount = getUnreadCount(chat);
             const isSelected = selectedChat?._id === chat._id;
@@ -101,9 +101,9 @@ const ChatList = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2, delay: index * 0.05 }}
                 onClick={() => setSelectedChat(chat)}
-                className={`sidebar-item ${isSelected ? 'active' : ''} mb-2`}
+                className={`sidebar-item ${isSelected ? 'active' : ''} mb-1.5 md:mb-2`}
               >
-                {/* Avatar with online indicator */}
+                {/* Avatar with online indicator - Responsive */}
                 <div className="relative flex-shrink-0">
                   <img
                     src={getChatAvatar(chat)}
@@ -111,21 +111,21 @@ const ChatList = () => {
                     loading="lazy"
                     width="48"
                     height="48"
-                    className="w-12 h-12 rounded-full object-cover ring-2 ring-white/10"
+                    className="w-11 h-11 md:w-12 md:h-12 rounded-full object-cover ring-2 ring-white/10"
                   />
                   {isOnline(chat) && (
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"
+                      className="absolute bottom-0 right-0 w-3 h-3 md:w-3.5 md:h-3.5 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"
                     />
                   )}
                 </div>
 
-                {/* Chat Info */}
+                {/* Chat Info - Responsive */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
-                    <h4 className="font-semibold text-gray-900 dark:text-white truncate">
+                    <h4 className="font-semibold text-gray-900 dark:text-white truncate text-sm md:text-base">
                       {getChatName(chat)}
                     </h4>
                     <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0 ml-2">
@@ -134,7 +134,7 @@ const ChatList = () => {
                   </div>
                   
                   <div className="flex items-center justify-between gap-2">
-                    <p className={`text-sm truncate flex-1 ${
+                    <p className={`text-xs sm:text-sm truncate flex-1 ${
                       unreadCount > 0 
                         ? 'text-gray-900 dark:text-white font-medium' 
                         : 'text-gray-600 dark:text-gray-400'

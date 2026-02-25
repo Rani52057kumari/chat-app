@@ -43,17 +43,17 @@ const Home = () => {
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 dark:from-dark-bg dark:to-dark-secondary">
-        {/* Header */}
-        <header className="container mx-auto px-4 py-6">
+        {/* Header - Responsive */}
+        <header className="container mx-auto px-4 md:px-6 py-4 md:py-6">
           <nav className="flex items-center justify-between">
-            <div className="text-2xl font-bold text-primary-600 dark:text-primary-500">
+            <div className="text-xl md:text-2xl font-bold text-primary-600 dark:text-primary-500">
               Chat App
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-2 md:gap-4">
               {isAuthenticated ? (
                 <Link
                   to="/chat"
-                  className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors"
+                  className="px-4 md:px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors text-sm md:text-base"
                 >
                   Open Chat
                 </Link>
@@ -61,13 +61,13 @@ const Home = () => {
                 <>
                   <Link
                     to="/login"
-                    className="px-6 py-2 border-2 border-primary-600 text-primary-600 dark:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg font-medium transition-colors"
+                    className="px-4 md:px-6 py-2 border-2 border-primary-600 text-primary-600 dark:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg font-medium transition-colors text-sm md:text-base"
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
-                    className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors"
+                    className="px-4 md:px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors text-sm md:text-base"
                   >
                     Sign Up
                   </Link>
@@ -77,21 +77,21 @@ const Home = () => {
           </nav>
         </header>
 
-        {/* Hero Section */}
-        <main className="container mx-auto px-4 py-20">
-          <div className="text-center mb-20">
-            <h1 className="text-5xl md:text-6xl font-bold text-light-text dark:text-dark-text mb-6">
+        {/* Hero Section - Responsive */}
+        <main className="container mx-auto px-4 md:px-6 py-12 md:py-16 lg:py-20">
+          <div className="text-center mb-12 md:mb-16 lg:mb-20">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-light-text dark:text-dark-text mb-4 md:mb-6 leading-tight">
               Real Time Chat App
               <br />
               <span className="text-primary-600 dark:text-primary-500">Free Secure Messaging & Online Chat</span>
             </h1>
-            <p className="text-xl text-light-textSecondary dark:text-dark-textSecondary mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-light-textSecondary dark:text-dark-textSecondary mb-6 md:mb-8 max-w-2xl mx-auto px-4">
               The best free chat web app for secure messaging. Experience instant real-time communication with end-to-end encryption, group chats, file sharing, and more. Your complete online chat website for private and group conversations.
             </p>
             {!isAuthenticated && (
               <Link
                 to="/register"
-                className="inline-block px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white text-lg rounded-lg font-semibold transition-colors shadow-lg"
+                className="inline-block px-6 md:px-8 py-3 md:py-4 bg-primary-600 hover:bg-primary-700 text-white text-base md:text-lg rounded-lg font-semibold transition-colors shadow-lg"
                 aria-label="Sign up for free secure messaging"
               >
                 Get Started Free - No Credit Card Required
@@ -99,45 +99,45 @@ const Home = () => {
             )}
           </div>
 
-          {/* Features Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+          {/* Features Grid - Responsive */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 mb-12 md:mb-16 lg:mb-20">
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-light-secondary dark:bg-dark-secondary p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                className="bg-light-secondary dark:bg-dark-secondary p-5 md:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
               >
-                <div className="text-primary-600 dark:text-primary-500 mb-4">
+                <div className="text-primary-600 dark:text-primary-500 mb-3 md:mb-4">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-light-text dark:text-dark-text mb-2">
+                <h3 className="text-lg md:text-xl font-semibold text-light-text dark:text-dark-text mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-light-textSecondary dark:text-dark-textSecondary">
+                <p className="text-sm md:text-base text-light-textSecondary dark:text-dark-textSecondary">
                   {feature.description}
                 </p>
               </div>
             ))}
           </div>
 
-          {/* SEO Content Section */}
-          <div className="max-w-4xl mx-auto mb-20 space-y-8">
-            <section className="bg-light-secondary dark:bg-dark-secondary rounded-xl p-8 shadow-lg">
-              <h2 className="text-3xl font-bold text-light-text dark:text-dark-text mb-4">
+          {/* SEO Content Section - Responsive */}
+          <div className="max-w-4xl mx-auto mb-12 md:mb-16 lg:mb-20 space-y-6 md:space-y-8">
+            <section className="bg-light-secondary dark:bg-dark-secondary rounded-xl p-5 md:p-6 lg:p-8 shadow-lg">
+              <h2 className="text-2xl md:text-3xl font-bold text-light-text dark:text-dark-text mb-3 md:mb-4">
                 Why Choose Our Real Time Chat App?
               </h2>
-              <p className="text-light-textSecondary dark:text-dark-textSecondary mb-4 leading-relaxed">
+              <p className="text-sm md:text-base text-light-textSecondary dark:text-dark-textSecondary mb-3 md:mb-4 leading-relaxed">
                 Looking for the best <strong>free chat web app</strong> with <strong>secure messaging</strong>? Our <strong>real time chat app</strong> provides instant communication with military-grade encryption. Whether you need an <strong>online chat website</strong> for personal use or business communication, we offer unlimited messaging, group chats, file sharing, and more - absolutely free.
               </p>
-              <p className="text-light-textSecondary dark:text-dark-textSecondary leading-relaxed">
+              <p className="text-sm md:text-base text-light-textSecondary dark:text-dark-textSecondary leading-relaxed">
                 As a leading <strong>secure messaging app</strong>, we prioritize your privacy with end-to-end encryption, secure authentication, and no data tracking. Our platform is designed for speed, reliability, and security - making it the perfect choice for anyone seeking a trustworthy <strong>free chat web app</strong>.
               </p>
             </section>
 
-            <section className="bg-light-secondary dark:bg-dark-secondary rounded-xl p-8 shadow-lg">
-              <h2 className="text-3xl font-bold text-light-text dark:text-dark-text mb-4">
+            <section className="bg-light-secondary dark:bg-dark-secondary rounded-xl p-5 md:p-6 lg:p-8 shadow-lg">
+              <h2 className="text-2xl md:text-3xl font-bold text-light-text dark:text-dark-text mb-3 md:mb-4">
                 Key Features of Our Secure Messaging Platform
               </h2>
-              <ul className="space-y-3 text-light-textSecondary dark:text-dark-textSecondary">
+              <ul className="space-y-2 md:space-y-3 text-sm md:text-base text-light-textSecondary dark:text-dark-textSecondary">
                 <li className="flex items-start">
                   <span className="text-primary-600 dark:text-primary-500 mr-2">✓</span>
                   <span><strong>Real-time messaging:</strong> Experience instant message delivery with typing indicators and read receipts</span>
@@ -166,12 +166,12 @@ const Home = () => {
             </section>
           </div>
 
-          {/* CTA Section */}
-          <div className="text-center bg-light-secondary dark:bg-dark-secondary rounded-xl p-12 shadow-xl">
-            <h2 className="text-3xl font-bold text-light-text dark:text-dark-text mb-4">
+          {/* CTA Section - Responsive */}
+          <div className="text-center bg-light-secondary dark:bg-dark-secondary rounded-xl p-6 md:p-8 lg:p-12 shadow-xl">
+            <h2 className="text-2xl md:text-3xl font-bold text-light-text dark:text-dark-text mb-3 md:mb-4">
               Ready to Start Using Our Free Secure Messaging App?
             </h2>
-            <p className="text-light-textSecondary dark:text-dark-textSecondary mb-8">
+            <p className="text-sm md:text-base text-light-textSecondary dark:text-dark-textSecondary mb-6 md:mb-8 px-4">
               Join thousands of users enjoying this real time chat app. Free forever, secure messaging with end-to-end encryption, and unlimited group chats on our online chat website.
             </p>
             {!isAuthenticated && (
@@ -187,10 +187,10 @@ const Home = () => {
         </main>
 
         {/* Footer */}
-        <footer className="container mx-auto px-4 py-8 mt-20 border-t border-light-border dark:border-dark-border">
+        <footer className="container mx-auto px-4 md:px-6 py-6 md:py-8 mt-12 md:mt-16 lg:mt-20 border-t border-light-border dark:border-dark-border">
           <div className="text-center">
             <nav className="mb-4" aria-label="Footer navigation">
-              <ul className="flex flex-wrap justify-center gap-6 text-light-textSecondary dark:text-dark-textSecondary">
+              <ul className="flex flex-wrap justify-center gap-4 md:gap-6 text-xs sm:text-sm md:text-base text-light-textSecondary dark:text-dark-textSecondary">
                 <li>
                   <Link to="/" className="hover:text-primary-600 dark:hover:text-primary-500 transition-colors">
                     Home
@@ -208,10 +208,10 @@ const Home = () => {
                 </li>
               </ul>
             </nav>
-            <p className="text-light-textSecondary dark:text-dark-textSecondary text-sm">
+            <p className="text-light-textSecondary dark:text-dark-textSecondary text-xs md:text-sm">
               Real Time Chat App - Free Secure Messaging & Online Chat Website
             </p>
-            <p className="text-light-textSecondary dark:text-dark-textSecondary text-sm mt-2">
+            <p className="text-light-textSecondary dark:text-dark-textSecondary text-xs md:text-sm mt-2">
               &copy; 2024 Chat App. All rights reserved.
             </p>
           </div>

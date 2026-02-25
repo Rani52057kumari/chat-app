@@ -63,23 +63,24 @@ const CreateGroupModal = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center p-4 md:pt-20">
-      <div className="bg-light-secondary dark:bg-dark-secondary rounded-lg shadow-xl w-full max-w-md animate-slide-up">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-light-border dark:border-dark-border">
-          <h3 className="text-lg font-semibold text-light-text dark:text-dark-text">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start md:items-center justify-center p-3 md:p-4 overflow-y-auto">
+      <div className="bg-light-secondary dark:bg-dark-secondary rounded-lg shadow-xl w-full max-w-md my-4 md:my-0 animate-slide-up">
+        {/* Header - Responsive */}
+        <div className="flex items-center justify-between p-3 md:p-4 border-b border-light-border dark:border-dark-border">
+          <h3 className="text-base md:text-lg font-semibold text-light-text dark:text-dark-text">
             Create Group
           </h3>
           <button
             onClick={onClose}
-            className="p-1 rounded-full hover:bg-light-hover dark:hover:bg-dark-hover text-light-text dark:text-dark-text"
+            className="p-2 rounded-full hover:bg-light-hover dark:hover:bg-dark-hover text-light-text dark:text-dark-text"
+            aria-label="Close"
           >
-            <FiX size={24} />
+            <FiX className="w-5 h-5 md:w-6 md:h-6" />
           </button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="p-4 space-y-4">
+        {/* Form - Responsive */}
+        <form onSubmit={handleSubmit} className="p-3 md:p-4 space-y-4">
           {/* Group Name Input */}
           <div>
             <label className="block text-sm font-medium text-light-text dark:text-dark-text mb-2">

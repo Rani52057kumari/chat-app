@@ -84,7 +84,7 @@ const MessageInput = ({ onTyping }) => {
   };
 
   return (
-    <div className="glass-light dark:glass-dark border-t border-white/10 p-4">
+    <div className="glass-light dark:glass-dark border-t border-white/10 p-3 md:p-4">
       {/* File Preview */}
       <AnimatePresence>
         {file && (
@@ -94,7 +94,7 @@ const MessageInput = ({ onTyping }) => {
             exit={{ opacity: 0, y: -10 }}
             className="mb-3"
           >
-            <div className="flex items-center gap-3 p-3 glass rounded-xl">
+            <div className="flex items-center gap-2 md:gap-3 p-2.5 md:p-3 glass rounded-xl">
               {filePreview ? (
                 <img
                   src={filePreview}
@@ -102,15 +102,15 @@ const MessageInput = ({ onTyping }) => {
                   loading="lazy"
                   width="48"
                   height="48"
-                  className="w-12 h-12 rounded-lg object-cover"
+                  className="w-10 h-10 md:w-12 md:h-12 rounded-lg object-cover flex-shrink-0"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                  <FiFile size={24} className="text-white" />
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center flex-shrink-0">
+                  <FiFile className="w-5 h-5 md:w-6 md:h-6 text-white" />
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                <p className="text-xs md:text-sm font-medium text-gray-900 dark:text-white truncate">
                   {file.name}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -121,17 +121,18 @@ const MessageInput = ({ onTyping }) => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={clearFile}
-                className="p-2 bg-red-500/10 hover:bg-red-500/20 rounded-full transition-colors"
+                className="p-2 bg-red-500/10 hover:bg-red-500/20 rounded-full transition-colors flex-shrink-0"
+                aria-label="Remove file"
               >
-                <FiX size={18} className="text-red-500" />
+                <FiX className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
               </motion.button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Input Form */}
-      <form onSubmit={handleSubmit} className="flex items-end gap-2">
+      {/* Input Form - Responsive */}
+      <form onSubmit={handleSubmit} className="flex items-end gap-1.5 md:gap-2">
         {/* Emoji Picker Button */}
         <div className="relative">
           <motion.button
@@ -139,9 +140,10 @@ const MessageInput = ({ onTyping }) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-            className="btn-icon"
+            className="btn-icon p-2 md:p-2.5"
+            aria-label="Add emoji"
           >
-            <FiSmile size={22} />
+            <FiSmile className="w-5 h-5 md:w-5.5 md:h-5.5" />
           </motion.button>
 
           <AnimatePresence>
@@ -155,7 +157,7 @@ const MessageInput = ({ onTyping }) => {
                   onClick={() => setShowEmojiPicker(false)}
                   className="fixed inset-0 z-40"
                 />
-                {/* Emoji Picker */}
+                {/* Emoji Picker - Responsive */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9, y: 10 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -165,8 +167,8 @@ const MessageInput = ({ onTyping }) => {
                   <EmojiPicker
                     onEmojiClick={handleEmojiClick}
                     theme={document.documentElement.classList.contains('dark') ? 'dark' : 'light'}
-                    height={400}
-                    width={350}
+                    height={window.innerWidth < 640 ? 320 : 400}
+                    width={window.innerWidth < 640 ? Math.min(300, window.innerWidth - 40) : 350}
                   />
                 </motion.div>
               </>
@@ -180,9 +182,10 @@ const MessageInput = ({ onTyping }) => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => fileInputRef.current?.click()}
-          className="btn-icon"
+          className="btn-icon p-2 md:p-2.5"
+          aria-label="Attach file"
         >
-          <FiPaperclip size={22} />
+          <FiPaperclip className="w-5 h-5 md:w-5.5 md:h-5.5" />
         </motion.button>
         <input
           ref={fileInputRef}
@@ -192,26 +195,27 @@ const MessageInput = ({ onTyping }) => {
           className="hidden"
         />
 
-        {/* Message Input */}
+        {/* Message Input - Responsive */}
         <input
           type="text"
           value={message}
           onChange={handleChange}
           placeholder="Type a message..."
-          className="input-glass flex-1"
+          className="input-glass flex-1 py-2.5 md:py-3 px-3 md:px-4 text-sm md:text-base"
         />
 
-        {/* Send Button */}
+        {/* Send Button - Responsive */}
         <motion.button
           type="submit"
           disabled={(!message.trim() && !file) || sending}
           whileHover={{ scale: sending || (!message.trim() && !file) ? 1 : 1.05 }}
           whileTap={{ scale: sending || (!message.trim() && !file) ? 1 : 0.95 }}
-          className={`btn-primary p-3 ${
+          className={`btn-primary p-2.5 md:p-3 ${
             (!message.trim() && !file) || sending
               ? 'opacity-50 cursor-not-allowed'
               : ''
           }`}
+          aria-label="Send message"
         >
           {sending ? (
             <motion.div
@@ -220,7 +224,7 @@ const MessageInput = ({ onTyping }) => {
               className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
             />
           ) : (
-            <FiSend size={20} />
+            <FiSend className="w-4 h-4 md:w-5 md:h-5" />
           )}
         </motion.button>
       </form>

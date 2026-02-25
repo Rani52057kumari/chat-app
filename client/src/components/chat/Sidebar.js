@@ -38,9 +38,9 @@ const Sidebar = ({ loading, onClose }) => {
 
   return (
     <div className="flex flex-col h-full glass-light dark:glass-dark lg:rounded-2xl overflow-hidden shadow-2xl">
-      {/* Header */}
-      <div className="flex items-center justify-between p-3 sm:p-4 border-b border-white/20 dark:border-gray-800/50 backdrop-blur-sm">
-        <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
+      {/* Header - Responsive */}
+      <div className="flex items-center justify-between p-3 md:p-4 border-b border-white/20 dark:border-gray-800/50 backdrop-blur-sm">
+        <div className="flex items-center space-x-2 md:space-x-3 flex-1 min-w-0">
           <div 
             className="relative cursor-pointer hover-lift flex-shrink-0"
             onClick={handleProfileClick}
@@ -51,31 +51,31 @@ const Sidebar = ({ loading, onClose }) => {
               loading="lazy"
               width="40"
               height="40"
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-primary-500 shadow-lg"
+              className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-primary-500 shadow-lg"
             />
-            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></span>
+            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 md:w-3 md:h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></span>
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base truncate">
+            <h2 className="font-semibold text-gray-900 dark:text-white text-sm md:text-base truncate">
               {user?.name}
             </h2>
             <p className="text-xs text-gray-600 dark:text-gray-400">Online</p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+        <div className="flex items-center space-x-1 md:space-x-2 flex-shrink-0">
           {/* Theme Toggle */}
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={toggleDarkMode}
-            className="btn-icon p-2 sm:p-2.5"
+            className="btn-icon p-2 md:p-2.5"
             aria-label="Toggle theme"
           >
             {darkMode ? (
-              <FiSun className="w-4 h-4 sm:w-5 sm:h-5" />
+              <FiSun className="w-4 h-4 md:w-5 md:h-5" />
             ) : (
-              <FiMoon className="w-4 h-4 sm:w-5 sm:h-5" />
+              <FiMoon className="w-4 h-4 md:w-5 md:h-5" />
             )}
           </motion.button>
 
@@ -84,10 +84,10 @@ const Sidebar = ({ loading, onClose }) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setSearchOpen(!searchOpen)}
-            className="btn-icon p-2 sm:p-2.5"
+            className="btn-icon p-2 md:p-2.5"
             aria-label="Search users"
           >
-            <FiSearch className="w-4 h-4 sm:w-5 sm:h-5" />
+            <FiSearch className="w-4 h-4 md:w-5 md:h-5" />
           </motion.button>
 
           {/* New Group */}
@@ -95,10 +95,10 @@ const Sidebar = ({ loading, onClose }) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowGroupModal(true)}
-            className="btn-icon p-2 sm:p-2.5"
+            className="btn-icon p-2 md:p-2.5"
             aria-label="Create group"
           >
-            <FiPlus className="w-4 h-4 sm:w-5 sm:h-5" />
+            <FiPlus className="w-4 h-4 md:w-5 md:h-5" />
           </motion.button>
 
           {/* Menu */}
@@ -107,10 +107,10 @@ const Sidebar = ({ loading, onClose }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowMenu(!showMenu)}
-              className="btn-icon p-2 sm:p-2.5"
+              className="btn-icon p-2 md:p-2.5"
               aria-label="More options"
             >
-              <FiMoreVertical className="w-4 h-4 sm:w-5 sm:h-5" />
+              <FiMoreVertical className="w-4 h-4 md:w-5 md:h-5" />
             </motion.button>
 
             <AnimatePresence>

@@ -57,15 +57,15 @@ const SearchUsers = ({ onClose }) => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="modal-content w-full max-w-md"
+          className="modal-content w-full max-w-md mx-4"
         >
-          {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-white/10">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg">
-                <FiSearch size={20} className="text-white" />
+          {/* Header - Responsive */}
+          <div className="flex items-center justify-between p-3 md:p-4 border-b border-white/10">
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="p-1.5 md:p-2 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg">
+                <FiSearch className="w-4 h-4 md:w-5 md:h-5 text-white" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white">
                 Search Users
               </h3>
             </div>
@@ -73,29 +73,30 @@ const SearchUsers = ({ onClose }) => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={onClose}
-              className="btn-icon"
+              className="btn-icon p-2"
+              aria-label="Close"
             >
-              <FiX size={24} />
+              <FiX className="w-5 h-5 md:w-6 md:h-6" />
             </motion.button>
           </div>
 
-          {/* Search Input */}
-          <div className="p-4 border-b border-white/10">
+          {/* Search Input - Responsive */}
+          <div className="p-3 md:p-4 border-b border-white/10">
             <div className="relative">
-              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
                 value={search}
                 onChange={handleSearch}
                 placeholder="Search by name or email..."
-                className="input-glass w-full pl-10"
+                className="input-glass w-full pl-9 md:pl-10 text-sm md:text-base"
                 autoFocus
               />
             </div>
           </div>
 
-          {/* Results */}
-          <div className="max-h-96 overflow-y-auto custom-scrollbar">
+          {/* Results - Responsive */}
+          <div className="max-h-[50vh] md:max-h-96 overflow-y-auto custom-scrollbar">
             {loading ? (
               <SearchSkeleton />
             ) : users.length === 0 ? (

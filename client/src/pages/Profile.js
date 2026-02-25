@@ -187,7 +187,7 @@ const Profile = () => {
         description="View and edit your profile"
       />
       
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 sm:py-8 px-4 sm:px-6">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 md:py-6 lg:py-8 px-3 sm:px-4 md:px-6">
         <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -195,9 +195,9 @@ const Profile = () => {
             transition={{ duration: 0.3 }}
             className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden"
           >
-            {/* Header */}
-            <div className="border-b border-gray-200 dark:border-gray-700 px-6 py-5">
-              <div className="flex items-center gap-4 mb-4">
+            {/* Header - Responsive */}
+            <div className="border-b border-gray-200 dark:border-gray-700 px-4 md:px-6 py-4 md:py-5">
+              <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -209,10 +209,10 @@ const Profile = () => {
                   <span className="text-sm font-medium">Back</span>
                 </motion.button>
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-start md:items-center flex-col md:flex-row gap-3 md:gap-0">
                 <div>
-                  <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Profile</h1>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  <h1 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white">Profile</h1>
+                  <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1">
                     Manage your profile information
                   </p>
                 </div>
@@ -221,7 +221,7 @@ const Profile = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleEditClick}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 w-full md:w-auto justify-center"
                   >
                     <FiEdit2 className="w-4 h-4" />
                     Edit
@@ -231,7 +231,7 @@ const Profile = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleCancel}
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 w-full md:w-auto justify-center"
                   >
                     <FiX className="w-4 h-4" />
                     Cancel
@@ -240,16 +240,16 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Profile Content */}
-            <div className="p-6">
-              {/* Avatar Section */}
-              <div className="flex flex-col items-center pb-8 border-b border-gray-200 dark:border-gray-700">
+            {/* Profile Content - Responsive */}
+            <div className="p-4 md:p-6">
+              {/* Avatar Section - Responsive */}
+              <div className="flex flex-col items-center pb-6 md:pb-8 border-b border-gray-200 dark:border-gray-700">
                 <div className="relative group mb-3">
                   <div className="relative">
                     <img
                       src={avatarPreview || user?.avatar || `https://ui-avatars.com/api/?name=${user?.name}&size=200`}
                       alt={user?.name}
-                      className={`w-32 h-32 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-lg ${
+                      className={`w-28 h-28 md:w-32 md:h-32 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-lg ${
                         uploadingAvatar ? 'opacity-50' : ''
                       }`}
                     />
@@ -258,15 +258,15 @@ const Profile = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleAvatarClick}
-                        className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 shadow-lg transition-all duration-200"
+                        className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2.5 md:p-3 shadow-lg transition-all duration-200"
                         type="button"
                       >
-                        <FiCamera className="w-5 h-5" />
+                        <FiCamera className="w-4 h-4 md:w-5 md:h-5" />
                       </motion.button>
                     )}
                     {uploadingAvatar && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded-full">
-                        <div className="animate-spin rounded-full h-10 w-10 border-4 border-white border-t-transparent"></div>
+                        <div className="animate-spin rounded-full h-8 w-8 md:h-10 md:w-10 border-4 border-white border-t-transparent"></div>
                       </div>
                     )}
                   </div>
@@ -278,10 +278,10 @@ const Profile = () => {
                     className="hidden"
                   />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
                   {user?.name}
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1 break-all px-2">
                   {user?.email}
                 </p>
                 {isEditing && (
@@ -387,9 +387,9 @@ const Profile = () => {
                   )}
                 </div>
 
-                {/* Action Buttons */}
+                {/* Action Buttons - Responsive */}
                 {isEditing && (
-                  <div className="flex gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
                     <motion.button
                       whileHover={{ scale: 1.01 }}
                       whileTap={{ scale: 0.99 }}

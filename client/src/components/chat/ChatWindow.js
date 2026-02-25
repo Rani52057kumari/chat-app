@@ -86,21 +86,22 @@ const ChatWindow = ({ onMenuClick }) => {
       animate={{ opacity: 1 }}
       className="flex-1 flex flex-col"
     >
-      {/* Header */}
-      <div className="glass-light dark:glass-dark border-b border-white/10 px-3 sm:px-4 py-3 sm:py-3.5 shadow-md">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-            {/* Back Button (mobile) */}
+      {/* Header - Fully Responsive */}
+      <div className="glass-light dark:glass-dark border-b border-white/10 px-3 md:px-4 lg:px-5 py-3 md:py-3.5 shadow-md">
+        <div className="flex items-center justify-between gap-2 md:gap-3">
+          <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+            {/* Back Button (mobile/tablet) */}
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleBack}
               className="lg:hidden btn-icon p-2 flex-shrink-0"
+              aria-label="Back to chats"
             >
               <FiArrowLeft className="w-5 h-5" />
             </motion.button>
 
-            {/* Avatar */}
+            {/* Avatar - Responsive Sizing */}
             <div className="relative flex-shrink-0">
               <img
                 src={getChatAvatar()}
@@ -108,20 +109,20 @@ const ChatWindow = ({ onMenuClick }) => {
                 loading="lazy"
                 width="44"
                 height="44"
-                className="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-cover ring-2 ring-white/10"
+                className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full object-cover ring-2 ring-white/10"
               />
               {isOnline() && (
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"
+                  className="absolute bottom-0 right-0 w-2.5 h-2.5 md:w-3 md:h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"
                 />
               )}
             </div>
 
-            {/* Chat Info */}
+            {/* Chat Info - Responsive Text */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 dark:text-white truncate text-sm sm:text-base">
+              <h3 className="font-semibold text-gray-900 dark:text-white truncate text-sm md:text-base">
                 {getChatName()}
               </h3>
               <AnimatePresence mode="wait">
@@ -172,14 +173,15 @@ const ChatWindow = ({ onMenuClick }) => {
             </div>
           </div>
 
-          {/* More Options */}
+          {/* More Options - Responsive */}
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => setShowInfo(!showInfo)}
-            className="btn-icon ml-2"
+            className="btn-icon p-2 md:p-2.5 flex-shrink-0"
+            aria-label="More options"
           >
-            <FiMoreVertical size={20} />
+            <FiMoreVertical className="w-5 h-5" />
           </motion.button>
         </div>
       </div>
