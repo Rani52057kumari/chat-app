@@ -5,7 +5,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiCamera, FiSave, FiX, FiEdit2, FiUser, FiMail, FiPhone, FiMessageSquare } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import { FiCamera, FiSave, FiX, FiEdit2, FiUser, FiMail, FiPhone, FiMessageSquare, FiArrowLeft } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../services/api';
@@ -13,6 +14,7 @@ import SEO from '../components/SEO';
 
 const Profile = () => {
   const { user, setUser } = useAuth();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -170,6 +172,14 @@ const Profile = () => {
     setIsEditing(true);
   };
 
+  const handleBack = () => {
+    if (window.history.length > 2) {
+      navigate(-1);
+    } else {
+      navigate('/chat');
+    }
+  };
+
   return (
     <>
       <SEO
@@ -187,6 +197,18 @@ const Profile = () => {
           >
             {/* Header */}
             <div className="border-b border-gray-200 dark:border-gray-700 px-6 py-5">
+              <div className="flex items-center gap-4 mb-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleBack}
+                  className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+                  type="button"
+                >
+                  <FiArrowLeft className="w-5 h-5" />
+                  <span className="text-sm font-medium">Back</span>
+                </motion.button>
+              </div>
               <div className="flex justify-between items-center">
                 <div>
                   <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Profile</h1>
