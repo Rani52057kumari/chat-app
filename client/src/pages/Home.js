@@ -119,6 +119,65 @@ const Home = () => {
             ))}
           </div>
 
+          {/* App Preview Section - Responsive & Attractive */}
+          <div className="mb-12 md:mb-16 lg:mb-20">
+            <div className="text-center mb-8 md:mb-12">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-light-text dark:text-dark-text mb-3 md:mb-4">
+                See Our App in Action
+              </h2>
+              <p className="text-sm sm:text-base md:text-lg text-light-textSecondary dark:text-dark-textSecondary max-w-2xl mx-auto px-4">
+                Beautiful, fast, and secure messaging on any device
+              </p>
+            </div>
+            
+            {/* Screenshot Grid - Responsive */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
+              {/* Main Screenshot - Large */}
+              <div className="md:col-span-2 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-dark-secondary dark:to-dark-bg rounded-2xl p-4 md:p-6 lg:p-8 shadow-2xl overflow-hidden">
+                <div className="aspect-video bg-gradient-to-br from-primary-600/10 to-primary-400/10 dark:from-primary-500/20 dark:to-primary-700/20 rounded-xl flex items-center justify-center border-2 border-primary-300/50 dark:border-primary-500/30">
+                  <div className="text-center px-4">
+                    <FiMessageCircle className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-primary-600 dark:text-primary-500 mx-auto mb-3 md:mb-4" />
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-light-text dark:text-dark-text mb-2">
+                      Real-Time Messaging Interface
+                    </h3>
+                    <p className="text-xs sm:text-sm md:text-base text-light-textSecondary dark:text-dark-textSecondary">
+                      Chat with friends, send photos, and create groups instantly
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Feature Highlights - Mobile & Desktop Views */}
+              <div className="bg-gradient-to-br from-primary-100 to-primary-200 dark:from-dark-secondary dark:to-dark-bg rounded-2xl p-4 md:p-6 shadow-xl overflow-hidden">
+                <div className="aspect-[3/4] bg-gradient-to-br from-primary-600/10 to-primary-400/10 dark:from-primary-500/20 dark:to-primary-700/20 rounded-xl flex items-center justify-center border-2 border-primary-300/50 dark:border-primary-500/30">
+                  <div className="text-center px-4">
+                    <FiUsers className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-primary-600 dark:text-primary-500 mx-auto mb-2 md:mb-3" />
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-light-text dark:text-dark-text mb-2">
+                      Mobile View
+                    </h3>
+                    <p className="text-xs sm:text-sm text-light-textSecondary dark:text-dark-textSecondary">
+                      Responsive on all devices
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-primary-100 to-primary-200 dark:from-dark-secondary dark:to-dark-bg rounded-2xl p-4 md:p-6 shadow-xl overflow-hidden">
+                <div className="aspect-[3/4] bg-gradient-to-br from-primary-600/10 to-primary-400/10 dark:from-primary-500/20 dark:to-primary-700/20 rounded-xl flex items-center justify-center border-2 border-primary-300/50 dark:border-primary-500/30">
+                  <div className="text-center px-4">
+                    <FiShield className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-primary-600 dark:text-primary-500 mx-auto mb-2 md:mb-3" />
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-light-text dark:text-dark-text mb-2">
+                      Secure & Private
+                    </h3>
+                    <p className="text-xs sm:text-sm text-light-textSecondary dark:text-dark-textSecondary">
+                      End-to-end encryption
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* SEO Content Section - Responsive */}
           <div className="max-w-4xl mx-auto mb-12 md:mb-16 lg:mb-20 space-y-6 md:space-y-8">
             <section className="bg-light-secondary dark:bg-dark-secondary rounded-xl p-5 md:p-6 lg:p-8 shadow-lg">
