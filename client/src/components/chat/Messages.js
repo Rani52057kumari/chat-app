@@ -3,18 +3,21 @@
  * Displays all messages in the chat with glassmorphism design
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useChat } from '../../context/ChatContext';
 import { useAuth } from '../../context/AuthContext';
 import { format } from 'date-fns';
-import { FiCheck, FiCheckCircle, FiDownload, FiFile } from 'react-icons/fi';
+import { FiCheck, FiDownload, FiFile } from 'react-icons/fi';
 import { MessageSkeleton } from '../LoadingSkeletons';
+import ProfileModal from '../ProfileModal';
 
 const Messages = () => {
   const { messages, loading } = useChat();
   const { user } = useAuth();
   const messagesEndRef = useRef(null);
+  const [showProfile, setShowProfile] = useState(false);
+  const [profileUserId, setProfileUserId] = useState(null);
   
   // Get backend URL for file attachments
   const getFileUrl = (fileUrl) => {
@@ -45,8 +48,26 @@ const Messages = () => {
     return message.sender._id === user._id;
   };
 
-  const isRead = (message) => {
-    return message.readBy?.length > 1;
+  const getReadStatus = (message) => {
+    if (!message.readBy || message.readBy.length === 0) {
+      return 'sent'; // Just sent
+    }
+    
+    // Check if anyone other than sender has read
+    const othersRead = message.readBy.some(r => r.user !== user._id);
+    
+    if (othersRead) {
+      return 'seen'; // Seen by others
+    }
+    
+    return 'delivered'; // Delivered but not read
+  };
+
+  const handleAvatarClick = (senderId) => {
+    if (senderId !== user._id) {
+      setProfileUserId(senderId);
+      setShowProfile(true);
+    }
   };
 
   if (loading) {
@@ -93,9 +114,11 @@ const Messages = () => {
                       <motion.img
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
+                        whileHover={{ scale: 1.1 }}
                         src={message.sender.avatar || 'https://ui-avatars.com/api/?background=random&name=' + encodeURIComponent(message.sender.name)}
                         alt={message.sender.name}
-                        className="w-7 h-7 md:w-8 md:h-8 rounded-full object-cover ring-2 ring-white/10"
+                        onClick={() => handleAvatarClick(message.sender._id)}
+                        className="w-7 h-7 md:w-8 md:h-8 rounded-full object-cover object-center ring-2 ring-white/10 cursor-pointer hover:ring-4 hover:ring-primary-500/30 transition-all"
                       />
                     ) : (
                       <div className="w-7 md:w-8" />
@@ -198,12 +221,28 @@ const Messages = () => {
                           <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
+                            className="flex items-center"
                           >
-                            {isRead(message) ? (
-                              <FiCheckCircle size={14} className="text-white" />
-                            ) : (
-                              <FiCheck size={14} className="text-white/70" />
-                            )}
+                            {(() => {
+                              const status = getReadStatus(message);
+                              if (status === 'seen') {
+                                return (
+                                  <div className="flex">
+                                    <FiCheck size={14} className="text-blue-400 -mr-1.5" />
+                                    <FiCheck size={14} className="text-blue-400" />
+                                  </div>
+                                );
+                              } else if (status === 'delivered') {
+                                return (
+                                  <div className="flex">
+                                    <FiCheck size={14} className="text-white/70 -mr-1.5" />
+                                    <FiCheck size={14} className="text-white/70" />
+                                  </div>
+                                );
+                              } else {
+                                return <FiCheck size={14} className="text-white/70" />;
+                              }
+                            })()}
                           </motion.div>
                         )}
                       </div>
@@ -215,6 +254,17 @@ const Messages = () => {
           </AnimatePresence>
           <div ref={messagesEndRef} />
         </div>
+      )}
+
+      {/* Profile Modal */}
+      {showProfile && profileUserId && (
+        <ProfileModal
+          userId={profileUserId}
+          onClose={() => {
+            setShowProfile(false);
+            setProfileUserId(null);
+          }}
+        />
       )}
     </div>
   );

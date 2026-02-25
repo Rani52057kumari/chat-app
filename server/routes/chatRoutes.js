@@ -10,7 +10,8 @@ const {
   createGroupChat,
   renameGroup,
   addToGroup,
-  removeFromGroup
+  removeFromGroup,
+  getGroupInfo
 } = require('../controllers/chatController');
 const { protect } = require('../middleware/authMiddleware');
 const {
@@ -31,6 +32,7 @@ router.get('/', fetchChats);
 router.post('/', validateRequest(createChatSchema), accessChat);
 
 router.post('/group', validateRequest(createGroupChatSchema), createGroupChat);
+router.get('/group/:chatId', getGroupInfo);
 router.put('/group/rename', validateRequest(updateGroupSchema), renameGroup);
 router.put('/group/add', validateRequest(groupUserSchema), addToGroup);
 router.put('/group/remove', validateRequest(groupUserSchema), removeFromGroup);

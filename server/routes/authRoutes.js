@@ -16,7 +16,9 @@ const {
   resetPassword,
   googleAuthCallback,
   uploadAvatar,
-  updateOnboarding
+  updateOnboarding,
+  getPublicProfile,
+  updateLocation
 } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const { authLimiter } = require('../middleware/securityMiddleware');
@@ -76,6 +78,12 @@ router.put(
 router.put('/onboarding', protect, updateOnboarding);
 
 router.get('/users', protect, searchUsers);
+
+// Get public profile
+router.get('/users/:userId/public-profile', protect, getPublicProfile);
+
+// Update user location
+router.put('/users/update-location', protect, updateLocation);
 
 // Password reset routes
 router.post(

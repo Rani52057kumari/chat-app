@@ -59,6 +59,8 @@ export const authAPI = {
   searchUsers: (search) => api.get(`/auth/users?search=${search}`),
   forgotPassword: (data) => api.post('/auth/forgot-password', data),
   resetPassword: (token, data) => api.post(`/auth/reset-password/${token}`, data),
+  getPublicProfile: (userId) => api.get(`/auth/users/${userId}/public-profile`),
+  updateLocation: (data) => api.put('/auth/users/update-location', data),
 };
 
 /**
@@ -68,6 +70,7 @@ export const chatAPI = {
   accessChat: (userId) => api.post('/chats', { userId }),
   fetchChats: () => api.get('/chats'),
   createGroupChat: (data) => api.post('/chats/group', data),
+  getGroupInfo: (chatId) => api.get(`/chats/group/${chatId}`),
   renameGroup: (data) => api.put('/chats/group/rename', data),
   addToGroup: (data) => api.put('/chats/group/add', data),
   removeFromGroup: (data) => api.put('/chats/group/remove', data),

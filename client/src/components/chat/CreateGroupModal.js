@@ -147,7 +147,7 @@ const CreateGroupModal = ({ onClose }) => {
                     loading="lazy"
                     width="40"
                     height="40"
-                    className="w-10 h-10 rounded-full"
+                    className="w-10 h-10 rounded-full object-cover object-center"
                   />
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-light-text dark:text-dark-text truncate">

@@ -249,7 +249,7 @@ const Profile = () => {
                     <img
                       src={avatarPreview || user?.avatar || `https://ui-avatars.com/api/?name=${user?.name}&size=200`}
                       alt={user?.name}
-                      className={`w-28 h-28 md:w-32 md:h-32 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-lg ${
+                      className={`w-28 h-28 md:w-32 md:h-32 rounded-full object-cover object-center border-4 border-white dark:border-gray-700 shadow-lg ${
                         uploadingAvatar ? 'opacity-50' : ''
                       }`}
                     />

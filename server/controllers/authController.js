@@ -401,6 +401,79 @@ const updateOnboarding = asyncHandler(async (req, res) => {
   });
 });
 
+/**
+ * @desc    Get public profile
+ * @route   GET /api/users/:userId/public-profile
+ * @access  Private
+ */
+const getPublicProfile = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await User.findById(userId).select('name avatar bio isOnline lastSeen createdAt city state country locationEnabled');
+
+  if (!user) {
+    throw new NotFoundError('User not found');
+  }
+
+  res.json({
+    success: true,
+    data: {
+      _id: user._id,
+      name: user.name,
+      avatar: user.avatar,
+      bio: user.bio || 'Hey there! I am using Chat App',
+      isOnline: user.isOnline,
+      lastSeen: user.lastSeen,
+      joinedDate: user.createdAt,
+      city: user.city,
+      state: user.state,
+      country: user.country,
+      locationEnabled: user.locationEnabled
+    }
+  });
+});
+
+/**
+ * @desc    Update user location
+ * @route   PUT /api/users/update-location
+ * @access  Private
+ */
+const updateLocation = asyncHandler(async (req, res) => {
+  const { city, state, country, locationEnabled } = req.body;
+
+  // Validate locationEnabled flag
+  if (typeof locationEnabled !== 'boolean') {
+    throw new BadRequestError('locationEnabled must be a boolean value');
+  }
+
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    throw new NotFoundError('User not found');
+  }
+
+  // Update location fields
+  user.city = city || null;
+  user.state = state || null;
+  user.country = country || null;
+  user.locationEnabled = locationEnabled;
+  user.lastLocationUpdate = locationEnabled ? Date.now() : null;
+
+  await user.save();
+
+  res.json({
+    success: true,
+    message: 'Location updated successfully',
+    data: {
+      city: user.city,
+      state: user.state,
+      country: user.country,
+      locationEnabled: user.locationEnabled,
+      lastLocationUpdate: user.lastLocationUpdate
+    }
+  });
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -412,5 +485,7 @@ module.exports = {
   resetPassword,
   googleAuthCallback,
   uploadAvatar,
-  updateOnboarding
+  updateOnboarding,
+  getPublicProfile,
+  updateLocation
 };

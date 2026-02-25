@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
+import LocationPermissionModal from '../components/LocationPermissionModal';
 import { FiMail, FiLock, FiEye, FiEyeOff, FiMessageCircle } from 'react-icons/fi';
 
 const Login = () => {
@@ -20,6 +21,7 @@ const Login = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showLocationModal, setShowLocationModal] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -38,10 +40,17 @@ const Login = () => {
     const result = await login(formData.email, formData.password);
     
     if (result.success) {
-      navigate('/chat');
+      // Show location permission modal before navigating
+      setShowLocationModal(true);
     }
     
     setLoading(false);
+  };
+
+  const handleLocationComplete = (allowed) => {
+    setShowLocationModal(false);
+    // Navigate to chat after location permission is handled
+    navigate('/chat');
   };
 
   return (
@@ -228,6 +237,13 @@ const Login = () => {
             By signing in, you agree to our Terms of Service and Privacy Policy
           </motion.p>
         </motion.div>
+
+        {/* Location Permission Modal */}
+        <LocationPermissionModal
+          isOpen={showLocationModal}
+          onClose={() => handleLocationComplete(false)}
+          onComplete={handleLocationComplete}
+        />
       </div>
     </>
   );

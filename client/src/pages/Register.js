@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
+import LocationPermissionModal from '../components/LocationPermissionModal';
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiMessageCircle } from 'react-icons/fi';
 
 const Register = () => {
@@ -23,6 +24,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [showLocationModal, setShowLocationModal] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -71,10 +73,17 @@ const Register = () => {
     const result = await register(formData.name, formData.email, formData.password);
     
     if (result.success) {
-      navigate('/chat');
+      // Show location permission modal before navigating
+      setShowLocationModal(true);
     }
     
     setLoading(false);
+  };
+
+  const handleLocationComplete = (allowed) => {
+    setShowLocationModal(false);
+    // Navigate to chat after location permission is handled
+    navigate('/chat');
   };
 
   return (
@@ -343,6 +352,13 @@ const Register = () => {
             By creating an account, you agree to our Terms of Service and Privacy Policy
           </motion.p>
         </motion.div>
+
+        {/* Location Permission Modal */}
+        <LocationPermissionModal
+          isOpen={showLocationModal}
+          onClose={() => handleLocationComplete(false)}
+          onComplete={handleLocationComplete}
+        />
       </div>
     </>
   );

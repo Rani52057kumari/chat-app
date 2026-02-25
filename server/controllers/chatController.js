@@ -122,10 +122,7 @@ const createGroupChat = async (req, res) => {
       });
     }
 
-    // Parse users if it's a string
-    let usersArray = typeof users === 'string' ? JSON.parse(users) : users;
-
-    if (usersArray.length < 2) {
+    if (!Array.isArray(users) || users.length < 2) {
       return res.status(400).json({
         success: false,
         message: 'More than 2 users are required to form a group chat'
@@ -133,7 +130,7 @@ const createGroupChat = async (req, res) => {
     }
 
     // Add current user to the group
-    usersArray.push(req.user._id);
+    const usersArray = [...users, req.user._id];
 
     const groupChat = await Chat.create({
       chatName: name,
@@ -146,6 +143,14 @@ const createGroupChat = async (req, res) => {
       .populate('users', '-password')
       .populate('groupAdmin', '-password');
 
+    // Emit socket event to all group members
+    const io = req.app.get('io');
+    if (io) {
+      usersArray.forEach((userId) => {
+        io.in(userId.toString()).emit('group-created', fullGroupChat);
+      });
+    }
+
     res.status(201).json({
       success: true,
       message: 'Group chat created successfully',
@@ -155,7 +160,7 @@ const createGroupChat = async (req, res) => {
     console.error('Create group chat error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error creating group chat'
+      message: error.message || 'Server error creating group chat'
     });
   }
 };
@@ -281,6 +286,12 @@ const removeFromGroup = async (req, res) => {
       });
     }
 
+    // Emit socket event to notify the user who left
+    const io = req.app.get('io');
+    if (io) {
+      io.in(userId.toString()).emit('left-group', { chatId, userId });
+    }
+
     res.json({
       success: true,
       message: 'User removed from group successfully',
@@ -295,11 +306,56 @@ const removeFromGroup = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Get group info
+ * @route   GET /api/chats/group/:chatId
+ * @access  Private
+ */
+const getGroupInfo = async (req, res) => {
+  try {
+    const { chatId } = req.params;
+
+    const groupChat = await Chat.findById(chatId)
+      .populate('users', '-password')
+      .populate('groupAdmin', '-password')
+      .populate('latestMessage');
+
+    if (!groupChat) {
+      return res.status(404).json({
+        success: false,
+        message: 'Group chat not found'
+      });
+    }
+
+    // Check if user is a member of the group
+    const isMember = groupChat.users.some(u => u._id.toString() === req.user._id.toString());
+    
+    if (!isMember) {
+      return res.status(403).json({
+        success: false,
+        message: 'You are not a member of this group'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: groupChat
+    });
+  } catch (error) {
+    console.error('Get group info error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error fetching group info'
+    });
+  }
+};
+
 module.exports = {
   accessChat,
   fetchChats,
   createGroupChat,
   renameGroup,
   addToGroup,
-  removeFromGroup
+  removeFromGroup,
+  getGroupInfo
 };

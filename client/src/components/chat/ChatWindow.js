@@ -11,12 +11,17 @@ import { getSocket } from '../../services/socket';
 import { FiMoreVertical, FiArrowLeft, FiUsers } from 'react-icons/fi';
 import Messages from './Messages';
 import MessageInput from './MessageInput';
+import ProfileModal from '../ProfileModal';
+import GroupInfoModal from './GroupInfoModal';
 
 const ChatWindow = ({ onMenuClick }) => {
   const { selectedChat, setSelectedChat, fetchMessages, onlineUsers, typingUsers } = useChat();
   const { user } = useAuth();
   const [showInfo, setShowInfo] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [showGroupInfo, setShowGroupInfo] = useState(false);
+  const [profileUserId, setProfileUserId] = useState(null);
   const socket = getSocket();
   const typingTimeout = useRef(null);
 
@@ -80,6 +85,26 @@ const ChatWindow = ({ onMenuClick }) => {
     return onlineUsers.includes(otherUser?._id);
   };
 
+  const getOtherUserId = () => {
+    if (selectedChat.isGroupChat) return null;
+    const otherUser = selectedChat.users.find(u => u._id !== user._id);
+    return otherUser?._id;
+  };
+
+  const handleAvatarClick = () => {
+    if (selectedChat.isGroupChat) {
+      // Show group info for group chats
+      setShowGroupInfo(true);
+    } else {
+      // Show profile for private chats
+      const userId = getOtherUserId();
+      if (userId) {
+        setProfileUserId(userId);
+        setShowProfile(true);
+      }
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -109,7 +134,8 @@ const ChatWindow = ({ onMenuClick }) => {
                 loading="lazy"
                 width="44"
                 height="44"
-                className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full object-cover ring-2 ring-white/10"
+                onClick={handleAvatarClick}
+                className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full object-cover object-center ring-2 ring-white/10 cursor-pointer hover:ring-4 hover:ring-primary-500/30 transition-all"
               />
               {isOnline() && (
                 <motion.div
@@ -122,7 +148,10 @@ const ChatWindow = ({ onMenuClick }) => {
 
             {/* Chat Info - Responsive Text */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-900 dark:text-white truncate text-sm md:text-base">
+              <h3 
+                onClick={handleAvatarClick}
+                className="font-semibold text-gray-900 dark:text-white truncate text-sm md:text-base cursor-pointer hover:text-primary-600 dark:hover:text-primary-500 transition-colors"
+              >
                 {getChatName()}
               </h3>
               <AnimatePresence mode="wait">
@@ -191,6 +220,25 @@ const ChatWindow = ({ onMenuClick }) => {
 
       {/* Message Input */}
       <MessageInput onTyping={handleTyping} />
+
+      {/* Profile Modal */}
+      {showProfile && profileUserId && (
+        <ProfileModal
+          userId={profileUserId}
+          onClose={() => {
+            setShowProfile(false);
+            setProfileUserId(null);
+          }}
+        />
+      )}
+
+      {/* Group Info Modal */}
+      {showGroupInfo && selectedChat?.isGroupChat && (
+        <GroupInfoModal
+          group={selectedChat}
+          onClose={() => setShowGroupInfo(false)}
+        />
+      )}
     </motion.div>
   );
 };

@@ -237,7 +237,7 @@ const Onboarding = ({ onComplete, onSkip }) => {
                 <img
                   src={avatarPreview || user?.avatar || `https://ui-avatars.com/api/?name=${user?.name}&size=200`}
                   alt="Profile"
-                  className={`w-28 h-28 rounded-full object-cover border-4 border-blue-500 shadow-lg ${uploadingAvatar ? 'opacity-50' : ''}`}
+                  className={`w-28 h-28 rounded-full object-cover object-center border-4 border-blue-500 shadow-lg ${uploadingAvatar ? 'opacity-50' : ''}`}
                 />
                 <motion.button
                   whileHover={{ scale: 1.05 }}

@@ -11,10 +11,12 @@ import { getSocket, connectSocket } from '../services/socket';
 import Sidebar from '../components/chat/Sidebar';
 import ChatWindow from '../components/chat/ChatWindow';
 import Onboarding from '../components/Onboarding';
+import MessageNotification from '../components/MessageNotification';
+import { AnimatePresence } from 'framer-motion';
 
 const Chat = () => {
   const { user } = useAuth();
-  const { selectedChat, fetchChats } = useChat();
+  const { selectedChat, fetchChats, toastNotification, setToastNotification, setSelectedChat, chats } = useChat();
   const socket = getSocket();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -118,6 +120,24 @@ const Chat = () => {
           onSkip={() => setShowOnboarding(false)}
         />
       )}
+
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toastNotification && (
+          <MessageNotification
+            notification={toastNotification}
+            onClose={() => setToastNotification(null)}
+            onClick={() => {
+              // Find and select the chat
+              const chat = chats.find(c => c._id === toastNotification.chatId);
+              if (chat) {
+                setSelectedChat(chat);
+              }
+              setToastNotification(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };

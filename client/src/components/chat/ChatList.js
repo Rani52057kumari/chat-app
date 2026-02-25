@@ -3,17 +3,20 @@
  * Displays list of all chats with glassmorphism design
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useChat } from '../../context/ChatContext';
 import { useAuth } from '../../context/AuthContext';
 import { format } from 'date-fns';
-import { FiCheck, FiCheckCircle } from 'react-icons/fi';
+import { FiCheck } from 'react-icons/fi';
 import { ChatListSkeleton } from '../LoadingSkeletons';
+import ProfileModal from '../ProfileModal';
 
 const ChatList = () => {
-  const { chats, selectedChat, setSelectedChat, loading, onlineUsers } = useChat();
+  const { chats, selectedChat, setSelectedChat, loading, onlineUsers, unreadCounts } = useChat();
   const { user } = useAuth();
+  const [showProfile, setShowProfile] = useState(false);
+  const [profileUserId, setProfileUserId] = useState(null);
 
   const getChatName = (chat) => {
     if (chat.isGroupChat) {
@@ -38,8 +41,24 @@ const ChatList = () => {
   };
 
   const getUnreadCount = (chat) => {
-    // This would come from your backend/context - placeholder for now
-    return chat.unreadCount || 0;
+    return unreadCounts[chat._id] || 0;
+  };
+
+  const getReadStatus = (message) => {
+    if (!message || !message.readBy) return 'sent';
+    const othersRead = message.readBy.some(r => r.user !== user._id);
+    return othersRead ? 'seen' : 'delivered';
+  };
+
+  const handleAvatarClick = (e, chat) => {
+    e.stopPropagation();
+    if (!chat.isGroupChat) {
+      const otherUser = chat.users.find(u => u._id !== user._id);
+      if (otherUser) {
+        setProfileUserId(otherUser._id);
+        setShowProfile(true);
+      }
+    }
   };
 
   const formatTime = (date) => {
@@ -111,7 +130,10 @@ const ChatList = () => {
                     loading="lazy"
                     width="48"
                     height="48"
-                    className="w-11 h-11 md:w-12 md:h-12 rounded-full object-cover ring-2 ring-white/10"
+                    onClick={(e) => handleAvatarClick(e, chat)}
+                    className={`w-11 h-11 md:w-12 md:h-12 rounded-full object-cover object-center ring-2 ring-white/10 ${
+                      !chat.isGroupChat ? 'cursor-pointer hover:ring-4 hover:ring-primary-500/30 transition-all' : ''
+                    }`}
                   />
                   {isOnline(chat) && (
                     <motion.div
@@ -145,12 +167,27 @@ const ChatList = () => {
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {/* Read receipts for sent messages */}
                       {chat.latestMessage?.sender?._id === user._id && (
-                        <div>
-                          {chat.latestMessage?.readBy?.length > 1 ? (
-                            <FiCheckCircle size={14} className="text-blue-500" />
-                          ) : (
-                            <FiCheck size={14} className="text-gray-400 dark:text-gray-500" />
-                          )}
+                        <div className="flex items-center">
+                          {(() => {
+                            const status = getReadStatus(chat.latestMessage);
+                            if (status === 'seen') {
+                              return (
+                                <div className="flex">
+                                  <FiCheck size={14} className="text-blue-500 -mr-1.5" />
+                                  <FiCheck size={14} className="text-blue-500" />
+                                </div>
+                              );
+                            } else if (status === 'delivered') {
+                              return (
+                                <div className="flex">
+                                  <FiCheck size={14} className="text-gray-400 dark:text-gray-500 -mr-1.5" />
+                                  <FiCheck size={14} className="text-gray-400 dark:text-gray-500" />
+                                </div>
+                              );
+                            } else {
+                              return <FiCheck size={14} className="text-gray-400 dark:text-gray-500" />;
+                            }
+                          })()}
                         </div>
                       )}
                       
@@ -171,6 +208,17 @@ const ChatList = () => {
             );
           })}
         </div>
+      )}
+
+      {/* Profile Modal */}
+      {showProfile && profileUserId && (
+        <ProfileModal
+          userId={profileUserId}
+          onClose={() => {
+            setShowProfile(false);
+            setProfileUserId(null);
+          }}
+        />
       )}
     </div>
   );

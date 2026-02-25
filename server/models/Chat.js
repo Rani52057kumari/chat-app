@@ -31,6 +31,12 @@ const chatSchema = new mongoose.Schema(
     groupAvatar: {
       type: String,
       default: ''
+    },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: 500,
+      default: ''
     }
   },
   {

@@ -51,7 +51,7 @@ const Sidebar = ({ loading, onClose }) => {
               loading="lazy"
               width="40"
               height="40"
-              className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-primary-500 shadow-lg"
+              className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-primary-500 shadow-lg object-cover object-center"
             />
             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 md:w-3 md:h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></span>
           </div>
@@ -231,7 +231,7 @@ const Sidebar = ({ loading, onClose }) => {
                   loading="lazy"
                   width="128"
                   height="128"
-                  className="w-32 h-32 rounded-full border-4 border-primary-500 shadow-2xl hover-glow"
+                  className="w-32 h-32 rounded-full border-4 border-primary-500 shadow-2xl hover-glow object-cover object-center"
                 />
                 <h2 className="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
                   {user?.name}

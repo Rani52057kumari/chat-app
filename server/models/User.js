@@ -58,6 +58,32 @@ const userSchema = new mongoose.Schema(
         'Please provide a valid phone number'
       ]
     },
+    city: {
+      type: String,
+      trim: true,
+      maxlength: [100, 'City name cannot be more than 100 characters'],
+      default: null
+    },
+    state: {
+      type: String,
+      trim: true,
+      maxlength: [100, 'State name cannot be more than 100 characters'],
+      default: null
+    },
+    country: {
+      type: String,
+      trim: true,
+      maxlength: [100, 'Country name cannot be more than 100 characters'],
+      default: null
+    },
+    locationEnabled: {
+      type: Boolean,
+      default: false
+    },
+    lastLocationUpdate: {
+      type: Date,
+      default: null
+    },
     isOnline: {
       type: Boolean,
       default: false

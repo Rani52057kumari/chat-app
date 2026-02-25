@@ -73,6 +73,17 @@ const initializeSocket = (io) => {
         if (user._id === message.sender._id) return;
         
         socket.in(user._id).emit('message-received', message);
+        
+        // Emit notification event for receivers
+        socket.in(user._id).emit('newMessageNotification', {
+          chatId: chat._id,
+          chatName: chat.isGroupChat ? chat.chatName : message.sender.name,
+          senderName: message.sender.name,
+          senderAvatar: message.sender.avatar,
+          messagePreview: message.content?.substring(0, 50) || '📎 File',
+          isGroupChat: chat.isGroupChat,
+          timestamp: message.createdAt
+        });
       });
     });
 
@@ -93,8 +104,15 @@ const initializeSocket = (io) => {
      * Message read receipt
      */
     socket.on('message-read', (data) => {
-      const { messageId, chatId, userId } = data;
+      const { messageId, chatId, userId, senderId } = data;
+      
+      // Notify everyone in the chat
       socket.in(chatId).emit('message-read-update', { messageId, userId });
+      
+      // Notify sender specifically
+      if (senderId) {
+        socket.in(senderId).emit('message-seen', { messageId, chatId, readerId: userId });
+      }
     });
 
     /**

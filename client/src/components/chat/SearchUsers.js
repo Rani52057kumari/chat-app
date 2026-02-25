@@ -130,7 +130,7 @@ const SearchUsers = ({ onClose }) => {
                       loading="lazy"
                       width="48"
                       height="48"
-                      className="w-12 h-12 rounded-full object-cover ring-2 ring-white/10"
+                      className="w-12 h-12 rounded-full object-cover object-center ring-2 ring-white/10"
                     />
                     <div className="flex-1 min-w-0">
                       <h4 className="font-semibold text-gray-900 dark:text-white truncate">
