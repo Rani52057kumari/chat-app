@@ -104,23 +104,30 @@ const Sidebar = ({ loading, onClose }) => {
           {/* Menu */}
           <div className="relative">
             <motion.button
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowMenu(!showMenu)}
-              className="btn-icon"
+              className="btn-icon p-2 sm:p-2.5"
               aria-label="More options"
             >
-              <FiMoreVertical className="w-5 h-5" />
+              <FiMoreVertical className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
 
             <AnimatePresence>
               {showMenu && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                  className="context-menu right-0 top-12"
-                >
+                <>
+                  {/* Backdrop */}
+                  <div 
+                    className="fixed inset-0 z-40"
+                    onClick={() => setShowMenu(false)}
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                    transition={{ duration: 0.15, ease: 'easeOut' }}
+                    className="context-menu right-0 top-14 mt-1"
+                  >
                   <button
                     onClick={handleProfileClick}
                     className="context-menu-item"
@@ -158,15 +165,16 @@ const Sidebar = ({ loading, onClose }) => {
                     <FiSettings className="w-4 h-4" />
                     <span>Settings</span>
                   </button>
-                  <hr className="my-2 border-white/20 dark:border-gray-700/50" />
+                  <hr className="my-1 border-gray-200 dark:border-gray-700" />
                   <button
                     onClick={handleLogout}
-                    className="context-menu-item text-red-500"
+                    className="context-menu-item text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
                   >
                     <FiLogOut className="w-4 h-4" />
                     <span>Logout</span>
                   </button>
                 </motion.div>
+                </>
               )}
             </AnimatePresence>
           </div>
